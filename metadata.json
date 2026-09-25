@@ -1,0 +1,8 @@
+{
+  "name": "megapos",
+  "description": "A high-performance Point of Sale system featuring real-time inventory tracking, a technical dashboard interface, and multi-terminal sync capabilities.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

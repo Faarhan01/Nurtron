@@ -1,0 +1,672 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-primary: var(--color-brand-primary, #22D3EE);
+  --color-brand-primary-light: var(--color-brand-primary-light, #22D3EE);
+  --color-brand-secondary: #6366F1;
+  --color-brand-highlight: var(--color-brand-highlight, #00FFD5);
+  
+  --color-dark-bg: var(--color-dark-bg, #062A95);
+  --color-dark-surface: var(--color-dark-surface, #041a5c);
+  --color-dark-border: var(--color-dark-border, #08288a);
+  --color-dark-text: var(--color-dark-text, #f1f5f9);
+  --color-dark-muted: var(--color-dark-muted, #CBD5E1);
+  
+  --color-light-bg: var(--color-light-bg, #F8FAFC);
+  --color-light-surface: var(--color-light-surface, #D7E6FF);
+  --color-light-border: var(--color-light-border, #CBD5E1);
+  --color-light-text: var(--color-light-text, #0F172A);
+  --color-light-muted: var(--color-light-muted, #475569);
+
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  --font-size-xs: var(--text-xs-dynamic);
+  --font-size-sm: var(--text-sm-dynamic);
+  --font-size-base: var(--text-base-dynamic);
+  --font-size-lg: var(--text-lg-dynamic);
+  --font-size-xl: var(--text-xl-dynamic);
+  --font-size-2xl: var(--text-2xl-dynamic);
+  --font-size-3xl: var(--text-3xl-dynamic);
+  --font-size-4xl: var(--text-4xl-dynamic);
+
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-hard: 0 10px 40px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.3);
+  
+  --shadow-indigo-tinted: 0 4px 20px rgba(99, 102, 241, 0.15);
+  --shadow-neutral-diffuse: var(--shadow-neutral-diffuse, 0 10px 40px rgba(15, 23, 42, 0.05));
+
+  --background-brand-gradient-dark: var(--background-brand-gradient-dark, linear-gradient(to right, #4136E5, #22D3EE));
+  --background-brand-gradient-light: var(--background-brand-gradient-light, linear-gradient(to right, #1E3A8A, #06B6D4));
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+    @apply antialiased selection:bg-[#22D3EE] selection:text-black;
+  }
+
+  ::selection {
+    background-color: #22D3EE;
+    color: #000000;
+  }
+
+  ::-moz-selection {
+    background-color: #22D3EE;
+    color: #000000;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    @apply font-sans;
+  }
+
+  /* Typography specification font class guarantees */
+  .font-sans {
+    font-family: var(--font-sans) !important;
+  }
+
+  .font-serif, .font-display {
+    font-family: var(--font-serif) !important;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono) !important;
+  }
+
+  /* Heading default family per specification */
+  h1, h2, h3, .page-title, .section-heading {
+    font-family: var(--font-serif);
+  }
+
+  /* Presale Stream Custom Modern Typography & Styling (Applied across pages, tabs, cards, tables & popups) */
+  .font-presale,
+  .font-presale *,
+  .font-live-metrics,
+  .font-live-metrics *,
+  .live-metrics-container,
+  .live-metrics-container *,
+  .live-metrics-card,
+  .live-metrics-card *,
+  .font-returns,
+  .font-returns *,
+  .presale-stream-container,
+  .presale-stream-container *,
+  .presale-stream-card,
+  .presale-stream-card *,
+  .presale-stream-table,
+  .presale-stream-table *,
+  .returns-portal-container,
+  .returns-portal-container *,
+  .returns-portal-card,
+  .returns-portal-card *,
+  .returns-portal-table,
+  .returns-portal-table *,
+  .expenditures-container,
+  .expenditures-container *,
+  .expenditure-card,
+  .expenditure-card *,
+  .expenditure-table,
+  .expenditure-table *,
+  .revenue-container,
+  .revenue-container *,
+  .revenue-card,
+  .revenue-card *,
+  .revenue-table,
+  .revenue-table *,
+  .balances-container,
+  .balances-container *,
+  .balances-card,
+  .balances-card *,
+  .balances-table,
+  .balances-table *,
+  .inventory-page,
+  .inventory-page *,
+  .inventory-card,
+  .inventory-card *,
+  .inv-tabs-card,
+  .inv-tabs-card *,
+  .register-page,
+  .register-page *,
+  .register-card,
+  .register-card *,
+  .register-cart,
+  .register-cart *,
+  .home-page,
+  .home-page *,
+  .dashboard-portal,
+  .dashboard-portal *,
+  .dashboard-welcome-card,
+  .dashboard-welcome-card *,
+  .dashboard-metrics-card,
+  .dashboard-metrics-card *,
+  .system-capabilities-carousel,
+  .system-capabilities-carousel *,
+  .capability-card,
+  .capability-card *,
+  .ecosystem-card,
+  .ecosystem-card *,
+  .feature-card,
+  .feature-card *,
+  .signed-out-header,
+  .signed-out-header *,
+  .settings-page,
+  .settings-page *,
+  .st-tabs-card,
+  .st-tabs-card *,
+  .transactions-page,
+  .transactions-page *,
+  .tx-tabs-card,
+  .tx-tabs-card *,
+  .reports-page,
+  .reports-page *,
+  .reports-container,
+  .reports-container *,
+  .reports-card,
+  .reports-card *,
+  .reports-table,
+  .reports-table *,
+  .rp-tabs-card,
+  .rp-tabs-card *,
+  .rp-search-card,
+  .rp-search-card *,
+  .rp-controls-layout,
+  .rp-controls-layout *,
+  .product-health-dashboard,
+  .product-health-dashboard *,
+  .product-health-metrics,
+  .product-health-metrics *,
+  .product-velocity-card,
+  .product-velocity-card *,
+  .product-equilibrium-card,
+  .product-equilibrium-card *,
+  .ar-ledger-card,
+  .ar-ledger-card *,
+  .ar-journal-card,
+  .ar-journal-card *,
+  .popup-card,
+  .popup-card * {
+    font-family: 'Outfit', 'Space Grotesk', system-ui, sans-serif !important;
+  }
+
+  .font-mono,
+  .home-page .font-mono,
+  .dashboard-portal .font-mono,
+  .register-page .font-mono,
+  .settings-page .font-mono,
+  .transactions-page .font-mono,
+  .reports-page .font-mono,
+  .product-health-dashboard .font-mono,
+  .popup-card .font-mono {
+    font-family: var(--font-mono) !important;
+  }
+
+  .font-presale .font-mono,
+  .presale-stream-container .font-mono,
+  .presale-stream-card .font-mono,
+  .presale-stream-table .font-mono,
+  .holdings-container .font-mono,
+  .holdings-card .font-mono,
+  .holdings-table .font-mono,
+  .holdings-card .font-mono *,
+  .holdings-table .font-mono * {
+    font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  }
+
+  .presale-stream-table th,
+  .returns-portal-table th,
+  .expenditure-table th,
+  .revenue-table th,
+  .balances-table th,
+  .inventory-table th,
+  .holdings-table th,
+  .empty-catalog-table th,
+  .staged-cart-table th,
+  .view-tx-empty-table th,
+  .view-presale-empty-table th,
+  .manifest-product-table th,
+  .home-page th,
+  .dashboard-portal th,
+  .dashboard-portal table th,
+  .inventory-page th,
+  .register-page th,
+  .register-page table th,
+  .register-card th,
+  .register-cart th,
+  .settings-page th,
+  .settings-page table th,
+  .st-tabs-card th,
+  .transactions-page th,
+  .transactions-page table th,
+  .reports-page th,
+  .reports-page table th,
+  .reports-table th,
+  .report-stock-table th,
+  .product-health-table th,
+  .ar-ledger-card th,
+  .ar-journal-card th {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase;
+  }
+
+  /* Enhanced letter spacing for Home, Transactions, Reports, Register, and Inventory page text readability (tabs, controls, cards, table body, popups) */
+  .home-page,
+  .home-page *:not(th),
+  .dashboard-portal,
+  .dashboard-portal *:not(th),
+  .dashboard-welcome-card,
+  .dashboard-welcome-card *:not(th),
+  .dashboard-metrics-card,
+  .dashboard-metrics-card *:not(th),
+  .system-capabilities-carousel,
+  .system-capabilities-carousel *:not(th),
+  .capability-card,
+  .capability-card *:not(th),
+  .ecosystem-card,
+  .ecosystem-card *:not(th),
+  .feature-card,
+  .feature-card *:not(th),
+  .signed-out-header,
+  .signed-out-header *:not(th),
+  .register-page,
+  .register-page *:not(th),
+  .register-card,
+  .register-card *:not(th),
+  .register-cart,
+  .register-cart *:not(th),
+  .settings-page,
+  .settings-page *:not(th),
+  .st-tabs-card,
+  .st-tabs-card *:not(th),
+  .transactions-page,
+  .transactions-page *:not(th),
+  .tx-tabs-card,
+  .tx-tabs-card *:not(th),
+  .tx-search-card,
+  .tx-search-card *:not(th),
+  .reports-page,
+  .reports-page *:not(th),
+  .reports-container,
+  .reports-container *:not(th),
+  .reports-card,
+  .reports-card *:not(th),
+  .reports-table,
+  .reports-table *:not(th),
+  .rp-tabs-card,
+  .rp-tabs-card *:not(th),
+  .rp-search-card,
+  .rp-search-card *,
+  .inventory-page,
+  .inventory-page *:not(th),
+  .inventory-card,
+  .inventory-card *:not(th),
+  .inv-tabs-card,
+  .inv-tabs-card *:not(th),
+  .inv-search-card,
+  .inv-search-card *:not(th),
+  .holdings-container,
+  .holdings-container *:not(th),
+  .holdings-card,
+  .holdings-card *:not(th),
+  .holdings-table,
+  .holdings-table *:not(th),
+  .product-health-dashboard,
+  .product-health-dashboard *:not(th),
+  .ar-ledger-card,
+  .ar-ledger-card *:not(th),
+  .ar-journal-card,
+  .ar-journal-card *:not(th) {
+    letter-spacing: 0.022em;
+  }
+
+  .home-page .tracking-tight,
+  .home-page .tracking-tighter,
+  .dashboard-portal .tracking-tight,
+  .dashboard-portal .tracking-tighter,
+  .dashboard-welcome-card .tracking-tight,
+  .dashboard-welcome-card .tracking-tighter,
+  .dashboard-metrics-card .tracking-tight,
+  .dashboard-metrics-card .tracking-tighter,
+  .system-capabilities-carousel .tracking-tight,
+  .system-capabilities-carousel .tracking-tighter,
+  .capability-card .tracking-tight,
+  .capability-card .tracking-tighter,
+  .ecosystem-card .tracking-tight,
+  .ecosystem-card .tracking-tighter,
+  .feature-card .tracking-tight,
+  .feature-card .tracking-tighter,
+  .transactions-page .tracking-tight,
+  .transactions-page .tracking-tighter,
+  .tx-tabs-card .tracking-tight,
+  .tx-tabs-card .tracking-tighter,
+  .reports-page .tracking-tight,
+  .reports-page .tracking-tighter,
+  .reports-card .tracking-tight,
+  .reports-card .tracking-tighter,
+  .rp-tabs-card .tracking-tight,
+  .rp-tabs-card .tracking-tighter,
+  .inventory-page .tracking-tight,
+  .inventory-page .tracking-tighter,
+  .inventory-card .tracking-tight,
+  .inventory-card .tracking-tighter,
+  .register-page .tracking-tight,
+  .register-page .tracking-tighter,
+  .register-card .tracking-tight,
+  .register-card .tracking-tighter,
+  .register-cart .tracking-tight,
+  .register-cart .tracking-tighter,
+  .settings-page .tracking-tight,
+  .settings-page .tracking-tighter,
+  .st-tabs-card .tracking-tight,
+  .st-tabs-card .tracking-tighter,
+  .inv-tabs-card .tracking-tight,
+  .inv-tabs-card .tracking-tighter,
+  .holdings-container .tracking-tight,
+  .holdings-container .tracking-tighter,
+  .holdings-card .tracking-tight,
+  .holdings-card .tracking-tighter,
+  .holdings-table .tracking-tight,
+  .holdings-table .tracking-tighter,
+  .product-health-dashboard .tracking-tight,
+  .product-health-dashboard .tracking-tighter {
+    letter-spacing: 0.022em !important;
+  }
+
+  /* Link patterns */
+  a {
+    @apply transition-colors duration-200 hover:text-brand-primary;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-border rounded-full hover:bg-brand-primary transition-colors;
+  }
+}
+
+@keyframes modalPulseBorder {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
+  20% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.95), 0 0 30px rgba(34, 211, 238, 0.65);
+    border-color: #22d3ee !important;
+    outline: 2px solid #22d3ee !important;
+    outline-offset: -2px !important;
+  }
+  40% {
+    transform: scale(0.985);
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.8), 0 0 20px rgba(6, 182, 212, 0.5);
+    border-color: #06b6d4 !important;
+    outline: 2px solid #06b6d4 !important;
+    outline-offset: -2px !important;
+  }
+  60% {
+    transform: scale(1.012);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.9), 0 0 25px rgba(34, 211, 238, 0.6);
+    border-color: #22d3ee !important;
+    outline: 2px solid #22d3ee !important;
+    outline-offset: -2px !important;
+  }
+  80% {
+    transform: scale(0.995);
+    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.5);
+    border-color: #38bdf8 !important;
+    outline: 2px solid #38bdf8 !important;
+    outline-offset: -2px !important;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.modal-pulse-warning {
+  animation: modalPulseBorder 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+@layer components {
+  .bg-gradient-sash-dark {
+    background: var(--background-brand-gradient-dark, linear-gradient(to right, #4136E5, #22D3EE));
+  }
+  .bg-gradient-sash-light {
+    background: var(--background-brand-gradient-light, linear-gradient(to right, #1E3A8A, #06B6D4));
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 font-black uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95;
+    background: var(--color-brand-primary, #22D3EE) !important;
+    color: #000000 !important;
+  }
+  .btn-primary:hover {
+    filter: brightness(110%);
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 font-black uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 transition-all shadow-md active:scale-95;
+    background: #4f46e5 !important;
+    color: #ffffff !important;
+  }
+  .btn-secondary:hover {
+    filter: brightness(110%);
+  }
+
+  .input-base {
+    @apply w-full px-4 py-3 rounded-lg border outline-none transition-all focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary;
+  }
+
+  .tabs-container {
+    @apply flex items-center gap-2 bg-black/5 dark:bg-white/5 p-1 rounded-lg;
+  }
+
+  .tab-item-active {
+    @apply bg-white dark:bg-white text-black shadow-lg font-black uppercase tracking-widest text-[10px] px-6 py-2.5 rounded-lg transition-all scale-105 border-2 border-white;
+  }
+
+  .tab-item-inactive {
+    @apply text-light-muted dark:text-dark-muted hover:text-black dark:hover:text-white font-bold uppercase tracking-widest text-[10px] px-6 py-2.5 rounded-lg transition-all border-2 border-transparent;
+  }
+
+
+
+  /* Professional Data Row style */
+  .data-row {
+    @apply flex items-center p-4 border-b border-dark-border/50 hover:bg-white/5 transition-colors cursor-pointer;
+  }
+}
+
+/* Gradient shift keyframes */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientShiftHover {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientShiftActive {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+/* ==========================================================================
+   DYNAMIC TYPOGRAPHY & CONSISTENT COLOR RULES (DARKMODE & LIGHTMODE)
+   ========================================================================== */
+
+/* 1. Dynamic Text Size Options (Compact/Standard/Expanded optimized for professional display) */
+:root {
+  --text-xs-dynamic: 13px;
+  --text-sm-dynamic: 15px;
+  --text-base-dynamic: 17px;
+  --text-lg-dynamic: 19px;
+  --text-xl-dynamic: 22px;
+  --text-2xl-dynamic: 26px;
+  --text-3xl-dynamic: 32px;
+  --text-4xl-dynamic: 38px;
+}
+
+/* Compact Layout (sm option in Settings) - 14px Base text */
+.text-size-sm {
+  --text-xs-dynamic: 11px;
+  --text-sm-dynamic: 12px;
+  --text-base-dynamic: 14px;
+  --text-lg-dynamic: 16px;
+  --text-xl-dynamic: 18px;
+  --text-2xl-dynamic: 21px;
+  --text-3xl-dynamic: 26px;
+  --text-4xl-dynamic: 32px;
+}
+
+/* Standard Ratio (base option in Settings) - 17px Base text */
+.text-size-base {
+  --text-xs-dynamic: 13px;
+  --text-sm-dynamic: 15px;
+  --text-base-dynamic: 17px;
+  --text-lg-dynamic: 19px;
+  --text-xl-dynamic: 22px;
+  --text-2xl-dynamic: 26px;
+  --text-3xl-dynamic: 32px;
+  --text-4xl-dynamic: 38px;
+}
+
+/* Expanded Layout (lg option in Settings) - 20px Base text */
+.text-size-lg {
+  --text-xs-dynamic: 15px;
+  --text-sm-dynamic: 17px;
+  --text-base-dynamic: 20px;
+  --text-lg-dynamic: 22px;
+  --text-xl-dynamic: 24px;
+  --text-2xl-dynamic: 28px;
+  --text-3xl-dynamic: 34px;
+  --text-4xl-dynamic: 40px;
+}
+
+/* 2. Universal Typography Utility Scaling Map (Scales standard & pixel utility classes) */
+.text-xs { font-size: var(--text-xs-dynamic) !important; }
+.text-sm { font-size: var(--text-sm-dynamic) !important; }
+.text-base { font-size: var(--text-base-dynamic) !important; }
+.text-lg { font-size: var(--text-lg-dynamic) !important; }
+.text-xl { font-size: var(--text-xl-dynamic) !important; }
+.text-2xl { font-size: var(--text-2xl-dynamic) !important; }
+.text-3xl { font-size: var(--text-3xl-dynamic) !important; }
+.text-4xl { font-size: var(--text-4xl-dynamic) !important; }
+
+.text-\[6px\] { font-size: calc(var(--text-xs-dynamic) - 5px) !important; }
+.text-\[7px\] { font-size: calc(var(--text-xs-dynamic) - 4px) !important; }
+.text-\[8px\] { font-size: calc(var(--text-xs-dynamic) - 3px) !important; }
+.text-\[9px\] { font-size: calc(var(--text-xs-dynamic) - 2px) !important; }
+.text-\[10px\] { font-size: calc(var(--text-xs-dynamic) - 1px) !important; }
+.text-\[11px\] { font-size: var(--text-xs-dynamic) !important; }
+.text-\[12px\] { font-size: var(--text-sm-dynamic) !important; }
+.text-\[13px\] { font-size: calc(var(--text-sm-dynamic) + 1px) !important; }
+.text-\[14px\] { font-size: var(--text-base-dynamic) !important; }
+.text-\[15px\] { font-size: calc(var(--text-base-dynamic) + 1px) !important; }
+.text-\[16px\] { font-size: var(--text-lg-dynamic) !important; }
+.text-\[18px\] { font-size: var(--text-xl-dynamic) !important; }
+.text-\[20px\] { font-size: var(--text-2xl-dynamic) !important; }
+.text-\[22px\] { font-size: calc(var(--text-2xl-dynamic) + 2px) !important; }
+.text-\[24px\] { font-size: var(--text-3xl-dynamic) !important; }
+
+/* 3. Base Variable overrides */
+.dark, [data-theme='dark'] {
+  --color-dark-text: #f1f5f9 !important;
+  --color-dark-muted: #94a3b8 !important;
+}
+
+html:not(.dark) {
+  --color-light-text: #0F172A !important;
+  --color-light-muted: #475569 !important;
+}
+
+/* 4. Consistent Uniform Sizing for Tables and Content Columns */
+table td,
+.data-table td {
+  font-size: var(--text-sm-dynamic);
+}
+
+table th,
+.data-table th {
+  font-size: var(--text-xs-dynamic);
+}
+
+/* Compact, clean navigation subtabs and side tab buttons */
+.tabs-container button,
+.tabs-container a,
+[role="tab"],
+.overflow-x-auto.no-scrollbar button,
+.flex.overflow-x-auto button,
+.overflow-x-auto.no-scrollbar a,
+.flex.overflow-x-auto a {
+  font-size: var(--text-xs-dynamic) !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+/* Mobile menu dropdown scrollbar and overscroll isolation */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mobile-menu__dropdown {
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu__dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+.mobile-menu__dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-menu__dropdown::-webkit-scrollbar-thumb {
+  background: rgba(140, 140, 160, 0.4);
+  border-radius: 9999px;
+}
+
+.mobile-menu__dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 160, 0.7);
+}
+
+
+

@@ -1,0 +1,196 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A representation of a product in the POS system.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "category": { "type": "string" },
+        "stockLevel": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "barcode": { "type": "string" },
+        "markupPrice": { "type": "number", "description": "Specific markup price for this product" },
+        "discountPrice": { "type": "number", "description": "Specific discount price for this product" }
+      },
+      "required": ["id", "name", "price", "category", "stockLevel"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A record of a completed sale.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "tax": { "type": "number" },
+        "discount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["cash", "card", "upi", "other", "Customer Credit"] },
+        "status": { "type": "string", "enum": ["completed", "pending", "voided"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "cashierId": { "type": "string" },
+        "customerName": { "type": "string" }
+      },
+      "required": ["id", "items", "totalAmount", "tax", "paymentMethod", "status", "timestamp", "cashierId"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "A staff member with specific access permissions.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "permissions": { "type": "object" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "permissions", "addedAt"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global store settings.",
+      "type": "object",
+      "properties": {
+        "storeName": { "type": "string" },
+        "streetNumber": { "type": "string" },
+        "streetName": { "type": "string" },
+        "suburb": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "website": { "type": "string" },
+        "taxRate": { "type": "number" },
+        "currency": { "type": "string" },
+        "globalMarkup": { "type": "number", "description": "Global markup percentage applied to all products" },
+        "globalDiscount": { "type": "number", "description": "Global discount percentage applied to all products" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" }
+      }
+    },
+    "Presale": {
+      "title": "Presale",
+      "description": "A record of a presale that pending fulfillment.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "operator": { "type": "string" },
+        "amount": { "type": "number" },
+        "items": { "type": "array" },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Voided"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "operator", "amount", "status", "timestamp"]
+    },
+    "Return": {
+      "title": "Return",
+      "description": "A record of a returned product/transaction.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "originalTransactionId": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "processedBy": { "type": "string" },
+        "status": { "type": "string", "enum": ["completed"] }
+      },
+      "required": ["id", "originalTransactionId", "items", "totalAmount", "timestamp", "processedBy", "status"]
+    },
+    "Expenditure": {
+      "title": "Expenditure",
+      "description": "Operational spend record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "Revenue": {
+      "title": "Revenue",
+      "description": "Income record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "BalanceAdjustment": {
+      "title": "BalanceAdjustment",
+      "description": "Allocation or release record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "Extended profile information for authenticated users.",
+      "type": "object",
+      "properties": {
+        "phoneNumber": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Device": {
+      "title": "Device",
+      "description": "A representation of a logged-in device.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "userAgent": { "type": "string" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "platform": { "type": "string" },
+        "language": { "type": "string" }
+      },
+      "required": ["id", "name", "lastActive"]
+    }
+  },
+  "firestore": {
+    "products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of all products available for sale."
+    },
+    "transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Historical log of all sales transactions."
+    },
+    "staff/{email}": {
+      "schema": "Staff",
+      "description": "Staff access control."
+    },
+    "settings/{docId}": {
+      "schema": "Settings",
+      "description": "Configuration documents."
+    },
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Extended user profile information."
+    },
+    "users/{userId}/devices/{deviceId}": {
+      "schema": "Device",
+      "description": "List of active devices for an authenticated user."
+    },
+    "users/{userId}/local_devices/{deviceId}": {
+      "schema": "Device",
+      "description": "List of local devices registered on the Wi-Fi subnet."
+    },
+    "presales/{presaleId}": {
+      "schema": "Presale",
+      "description": "Pending presale orders."
+    },
+    "returns/{returnId}": {
+      "schema": "Return",
+      "description": "Historical log of returns."
+    }
+  }
+}

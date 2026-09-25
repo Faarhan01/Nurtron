@@ -1,0 +1,190 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getEmail() {
+      return request.auth.token.email;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.]+@?[a-zA-Z0-9_\\-\\.]*$'); 
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (getEmail() != null && getEmail() == 'faarhanch@gmail.com') ||
+        (
+          getEmail() != null &&
+          exists(/databases/$(database)/documents/staff/$(getEmail())) && 
+          'permissions' in get(/databases/$(database)/documents/staff/$(getEmail())).data &&
+          'settings' in get(/databases/$(database)/documents/staff/$(getEmail())).data.permissions &&
+          get(/databases/$(database)/documents/staff/$(getEmail())).data.permissions.settings == true
+        ) || (
+          getEmail() == null || !exists(/databases/$(database)/documents/staff/$(getEmail()))
+        )
+      );
+    }
+
+    function hasPermission(p) {
+      return isSignedIn() && (
+        (getEmail() != null && getEmail() == 'faarhanch@gmail.com') ||
+        (
+          getEmail() != null &&
+          exists(/databases/$(database)/documents/staff/$(getEmail())) && 
+          'permissions' in get(/databases/$(database)/documents/staff/$(getEmail())).data &&
+          p in get(/databases/$(database)/documents/staff/$(getEmail())).data.permissions &&
+          get(/databases/$(database)/documents/staff/$(getEmail())).data.permissions[p] == true
+        ) || (
+          getEmail() == null || !exists(/databases/$(database)/documents/staff/$(getEmail()))
+        )
+      );
+    }
+
+    // --- Validation Helpers ---
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['id', 'name', 'price', 'category', 'stockLevel']) 
+        && data.name is string && data.name.size() > 0
+        && data.price is number && data.price >= 0
+        && data.stockLevel is number && data.stockLevel >= 0;
+    }
+
+    function isValidTransaction(data) {
+      return data.keys().hasAll(['id', 'items', 'totalAmount', 'tax', 'paymentMethod', 'status', 'timestamp', 'cashierId'])
+        && data.totalAmount is number && data.totalAmount >= 0
+        && data.paymentMethod in ['cash', 'card', 'upi', 'other', 'Customer Credit']
+        && data.status in ['completed', 'pending', 'voided'];
+    }
+
+    function isValidStaff(data) {
+      return data.keys().hasAll(['email', 'permissions', 'addedAt'])
+        && data.email is string
+        && data.permissions is map
+        && data.addedAt is string;
+    }
+
+    function isValidPresale(data) {
+      return data.keys().hasAll(['id', 'operator', 'amount', 'status', 'timestamp'])
+        && data.amount is number && data.amount >= 0
+        && data.status in ['Pending', 'Approved', 'Voided'];
+    }
+
+    function isValidReturn(data) {
+      return data.keys().hasAll(['id', 'originalTransactionId', 'items', 'totalAmount', 'timestamp', 'processedBy', 'status'])
+        && data.totalAmount is number && data.totalAmount >= 0
+        && data.status == 'completed';
+    }
+
+    function isValidUser(data) {
+      return (data.keys().hasAll(['updatedAt']) || data.keys().hasAll(['phoneNumber', 'updatedAt']))
+        && (!('phoneNumber' in data) || data.phoneNumber is string)
+        && data.updatedAt is string;
+    }
+
+    function isValidDevice(data) {
+      return data.keys().hasAll(['id', 'name', 'userAgent', 'lastActive', 'platform', 'language'])
+        && data.id is string
+        && data.name is string && data.name.size() <= 200
+        && data.userAgent is string && data.userAgent.size() <= 1000
+        && data.lastActive is string
+        && data.platform is string
+        && data.language is string;
+    }
+
+    // --- Collection Rules ---
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create, delete: if isAdmin() || hasPermission('inventory');
+      allow update: if isSignedIn();
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isAdmin();
+    }
+
+    match /presales/{presaleId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    match /returns/{returnId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isAdmin();
+    }
+
+    match /expenditures/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /revenue/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /balances/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /suppliers/{docId} {
+      allow read: if isSignedIn();
+      allow write: if hasPermission('inventory') || isAdmin();
+    }
+
+    match /customers/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /categories/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || hasPermission('inventory');
+    }
+
+    match /staff/{email} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /settings/{docId} {
+      allow read: if isSignedIn();
+      allow write: if hasPermission('settings') || isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isSignedIn() && request.auth.uid == userId && isValidUser(incoming());
+
+      match /devices/{deviceId} {
+        allow read, delete: if isSignedIn() && request.auth.uid == userId;
+        allow create, update: if isSignedIn() && request.auth.uid == userId && isValidDevice(incoming());
+      }
+
+      match /local_devices/{deviceId} {
+        allow read, delete: if isSignedIn() && request.auth.uid == userId;
+        allow create, update: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+  }
+}
